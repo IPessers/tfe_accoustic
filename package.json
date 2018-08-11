@@ -1,0 +1,21 @@
+{
+  "name": "tfe_axel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "lite-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "js",
+    "Tone.js",
+    "web-audio-api"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lite-server": "^2.4.0",
+    "tone": "^0.12.80"
+  }
+}
