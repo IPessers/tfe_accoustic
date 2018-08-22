@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "lite-server",
-    "test": "echo \"There will be no tests\" && exit 1"
+    "test": "echo \"There will be no tests\" && exit 1",
+    "build": "./node_modules/.bin/webpack-cli --config webpack.config.js --mode development",
+    "build-prod": "./node_modules/.bin/webpack-cli --config webpack.config.js --mode production"
   },
   "keywords": [
     "js",
@@ -17,5 +19,16 @@
   "dependencies": {
     "lite-server": "^2.4.0",
     "tone": "^0.12.80"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-rc.2",
+    "@babel/preset-env": "^7.0.0-rc.2",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-loader": "^7.1.5",
+    "webpack": "^4.17.0",
+    "webpack-cli": "^3.1.0"
+  },
+  "resolutions": {
+    "babel-core": "7.0.0-bridge.0"
   }
 }
