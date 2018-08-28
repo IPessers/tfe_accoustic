@@ -23,6 +23,21 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.html$/,
+        use: {
+          loader: 'html-loader',
+          options: {
+            minimize: true,
+          },
+        },
+      },
+      {
+        test: /\.css$/,
+        use: {
+          loader: 'css-loader',
+        }
+      }
     ],
   },
   plugins: [],
