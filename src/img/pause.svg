@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 6.332 9">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #323d47;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    </style>
+  </defs>
+  <g id="Groupe_86" data-name="Groupe 86" transform="translate(-1351.334 -640)">
+    <path id="Tracé_44" data-name="Tracé 44" class="cls-1" d="M0,0V-8" transform="translate(1351.834 648.5)"/>
+    <path id="Tracé_45" data-name="Tracé 45" class="cls-1" d="M0,0V-8" transform="translate(1357.166 648.5)"/>
+  </g>
+</svg>

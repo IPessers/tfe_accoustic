@@ -1,9 +1,213 @@
 <!DOCTYPE html>
 <html>
-<body>
-  <!-- <script src="https://cdn.rawgit.com/mohayonao/web-audio-api-shim/master/build/web-audio-api-shim.min.js"></script> -->
+<head>
+	<title>Interface de filtrage d'un signal audio</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initialscale=1.0">
+	<link id="css" rel="stylesheet" type="text/css" href="style.css"/>
+	<link id="css2" rel="stylesheet" media="screen and (max-device-width:360px)" type="text/css" href="style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch.min.js"></script>
   <script src="https://tonejs.github.io/build/Tone.min.js"></script>
-  <script src="index.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('.js-scrollTo').on('click', function() { // Au clic sur un élément
+				var page = $(this).attr('href'); // Page cible
+				$('html, body').animate( { scrollTop: $(page).offset().top }, 2000, 'easeOutCubic'
+				); // Go
+				return false;
+			});
+		});
+	</script>
+</head>
+<body>
+	<div id="accueil">
+		<img src="img/Logo Rooms_white.png" alt="logo Room's" id="roomsLogo">
+		<h1 id="titre">Interface de filtrage d'un signal audio</h1>
+		<img src="img/mouse.svg" alt="mouse icon" id="mouseIcon">
+		<img src="img/hand.svg" alt="hand icon" id="handIcon">
+
+		<div id="animationCercle">
+			<a href="#titre2" class="js-scrollTo"><div class="circle one"></div></a>
+		</div>
+
+		<div id="filtrage">
+			<main>
+				<div id="titre2">
+					<h2>Filtrage d'un signal par bande d'octave ou de tiers d'octave</h2>
+				</div>
+	
+				<div id="upload">
+					<a href="#" class="a-btn-upload">
+						<span class="a-btn-upload-text">Signal à filtrer</span> 
+						<span class="a-btn-icon-upload-left"><span></span></span>	
+					</a>
+
+					<p>Filtrage (IEC 1260)</p>
+
+					<div id="octave">		
+						<select id="choixOctave">
+							<option value="1">1/3 Octave</option>
+							<option value="2">1/1 Octave</option>
+						</select>
+						<img src="img/arrowdownmini.svg" alt="mini down arrow">
+					</div>
+				</div>
+	
+				<div id="gains">
+					<p>Attribution des gains à chaque filtre </p>
+					<a href="#" class="a-btn-gains">
+						<span class="a-btn-gains-text">Valider</span> 
+						<span class="a-btn-icon-gains-left"></span>	
+					</a>
+					<ul id="tableauTiersOctave">
+						<li class="menu"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">Fréquences</div><div class="ligneTableau bloc3">Gain</div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">10 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">12,5 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">16 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">20 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">25 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">31,5 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">40 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">50 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">63 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">80 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">100 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">125 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">160 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">200 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">250 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">315 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">400 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">500 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">630 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">800 Hz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">1 KHz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">1,25 KHz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">1,6 KHz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">2 KHz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">2,5 KHz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">3,15 KHz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">4 KHz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">5 KHz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">6.3 KHz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">8 KHz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">10 KHz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">12,5 KHz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">16 KHz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+						<li class="menu tiers"><div class="ligneTableau bloc1"><input type="checkbox"></div><div class="ligneTableau bloc2">20 KHz</div><div class="ligneTableau bloc3"><input type="text" placeholder="dB"></div></li>
+					</ul>
+
+					</table>
+				</div>
+	
+				<div id="signalEntree">
+					<p>Reconstitution du signal d'entrée pour vérification</p>
+					<div id="boutonPlayEntree">
+						<img src="img/play.svg" alt="play" id="playEntree">
+						<div id="playEntreeCircle"></div>
+					</div>		
+
+					<div id="boutonPauseEntree">
+						<img src="img/pause.svg" alt="pause" id="pauseEntree">
+						<div id="pauseEntreeCircle"></div>
+					</div>
+				</div>
+	
+				<div id="signalSortant">
+					<p>Préécoute du signal sortant</p>
+					<div id="boutonPlaySortie">
+						<img src="img/play.svg" alt="play" id="playSortie">
+						<div id="playSortieCircle"></div>
+					</div>		
+
+					<div id="boutonPauseSortie">
+						<img src="img/pause.svg" alt="pause" id="pauseSortie">
+						<div id="pauseSortieCircle"></div>
+					</div>
+
+					<a href="#" class="a-btn-download">
+						<span class="a-btn-download-text">Création du fichier audio</span> 
+						<span class="a-btn-icon-download-left"><span></span></span>	
+					</a>
+				</div>
+			</main>	
+			<div id="footer">
+				<p> <a href="http://room-s.be/index.html" target="_blank"><strong>Room's</strong></a> - laboratoire agréé par la région wallonne</p>
+				<div id="darkMode" onclick="document.getElementById('css').href='style2.css'; document.getElementById('css2').href='style2.css';"></div>
+				<div id="lightMode" onclick="document.getElementById('css').href='style.css'; document.getElementById('css2').href='style.css';"></div>
+				<div id="goUp">
+					<a href="#titre2" class="js-scrollTo"><img src="img/goUp.svg" alt="DarkMode" id="arrowGoUp"></a>
+					<a href="#titre2" class="js-scrollTo"><div id="circleGoUp"></div></a>
+				</div>
+			</div> 
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		// Affichage du code de nationalité choisi
+	document.getElementById("choixOctave").addEventListener("change", function (e) {
+	    console.log("X" + e.target.value);
+
+	    if(e.target.value==2){
+	    	//document.getElementsByClassName("tiers").style.visibility = "hidden";
+	    	var tiers = document.querySelectorAll('.tiers'),
+   				i = 0,
+   				l = tiers.length;
+
+				for (i; i < l; i++) {
+				    tiers[i].style.display = 'none';
+				}
+				if(window.innerWidth>1399){
+					document.getElementById('gains').style.height='1140px';
+					document.getElementById('filtrage').style.height='1800px';
+			 	}
+
+			 	else if(window.innerWidth>767){
+			 		document.getElementById('gains').style.height='820px';
+			 		document.getElementById('signalEntree').style.top='1250px';
+			 		document.getElementById('signalSortant').style.top='1449px';
+					document.getElementById('filtrage').style.height='1845px';
+				}
+
+				else if(window.innerWidth>320){
+			 		document.getElementById('gains').style.height='750px';
+			 		document.getElementById('signalEntree').style.top='1200px';
+			 		document.getElementById('signalSortant').style.top='1410px';
+					document.getElementById('filtrage').style.height='1820px';
+				}
+			}
+		else{
+			var tiers = document.querySelectorAll('.tiers'),
+   				i = 0,
+   				l = tiers.length;
+
+				for (i; i < l; i++) {
+				    tiers[i].style.display = 'flex';
+				}
+
+				if(window.innerWidth>1399){
+					document.getElementById('gains').style.height='2942px';
+					document.getElementById('filtrage').style.height='3584px';
+			 	}
+
+			 	else if(window.innerWidth>767){
+			 		document.getElementById('gains').style.height='2000px';
+			 		document.getElementById('signalEntree').style.top='2423px';
+			 		document.getElementById('signalSortant').style.top='2614px';
+					document.getElementById('filtrage').style.height='3030px';
+				}
+
+				else if(window.innerWidth>320){
+			 		document.getElementById('gains').style.height='1870px';
+			 		document.getElementById('signalEntree').style.top='2315px';
+			 		document.getElementById('signalSortant').style.top='2525px';
+					document.getElementById('filtrage').style.height='2930px';
+				}
+			}
+		});
+
+	</script>
 </body>
 </html>
