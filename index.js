@@ -7,10 +7,37 @@ const audioContext = new AudioContext();
 
 // definition de la source
 // const source = new Tone.Player('./assets/Bruit_rose_10s.wav');
-const source = new Tone.Player('./assets/Bon Jovi - You give love a bad name.mp3'); // TODO charger fichier venant de l'html
-source.volume.value = -20;
-source.autostart = true;
-source.loop = true;
+const sourceFile = './assets/Bon Jovi - You give love a bad name.mp3';
+
+const sourceAltered = new Tone.Player(sourceFile, function() {
+    const playUser = document.querySelector('REPLACE_ME'); // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton play de la version user
+
+	playUser.addEventListener('click', () => {
+        player.start(new Tone.now());
+    });
+
+    document.querySelector('#stop').addEventListener('click', () => { // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton stop de la version user
+        player.stop();
+    });
+}); // TODO charger fichier venant de l'html
+sourceAltered.volume.value = -20;
+sourceAltered.autostart = true;
+sourceAltered.loop = true;
+
+const sourceCheck = new Tone.Player(sourceFile, function() {
+    const playUser = document.querySelector('REPLACE_ME'); // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton play de la version check
+
+	playUser.addEventListener('click', () => {
+        player.start(new Tone.now());
+    });
+
+    document.querySelector('#stop').addEventListener('click', () => { // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton stop de la version check
+        player.stop();
+    });
+}); // TODO charger fichier venant de l'html
+sourceCheck.volume.value = -20;
+sourceCheck.autostart = true;
+sourceCheck.loop = true;
 
 const EQUALIZER_SIMPLE = [16, 31.5, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
 const EQUALIZER_TRIPLE = [10, 12.5, 16, 20, 25, 31.5, 40, 50, 63, 80, 100, 125, 160, 200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600, 2000, 2500, 3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000, 20000];
@@ -33,26 +60,49 @@ const equalizerSetup = function(frequence, tiersOctave) {
 }
 
 // choisir simple ou triple octave
-const equalizerBands = isSimple ? EQUALIZER_SIMPLE.map(equalizerSetup, false) : EQUALIZER_TRIPLE.map(equalizerSetup, true);
+let equalizerBands;
+let equalizerCheck;
 
-// fonction pour changer une frequence
-const changeFrequenceGain = function(frequenceIndex, value) {
-    equalizerBands[frequenceIndex].gain.value = value;
+if (isSimple) {
+    // 1/3 octave
+    equalizerBands = EQUALIZER_SIMPLE.map(equalizerSetup, false); // changes of the user
+    equalizerCheck = EQUALIZER_SIMPLE.prototype.concat(EQUALIZER_SIMPLE).map(equalizerSetup, false); // revert check changes
+} else {
+    // octave
+    equalizerBands = EQUALIZER_TRIPLE.map(equalizerSetup, true);
+    equalizerCheck = EQUALIZER_TRIPLE.prototype.concat(EQUALIZER_TRIPLE).map(equalizerSetup, true);
 }
 
+// fonction pour changer une frequence
+// ============================================ ICI AXEL => add eventListener avec changeFrequenceGain(index, gain) sur chaque champ de gain
+const changeFrequenceGain = function(frequenceIndex, value) {
+    // change frequence value for alterd result
+    equalizerBands[frequenceIndex].gain.value = value;
+
+    // change frequence value like the previous one to have the change wanted by the user
+    // and do the opposite on the same frequence but on a different node to prove the quality
+    equalizerCheck[frequenceIndex].gain.value = value;
+    equalizerCheck[frequenceIndex + equalizerBands.length].gain.value = -value;
+}
+
+
+// TODO merge in 1
 // lie tous les filtres
-source.connect(equalizerBands[0]);
+sourceAltered.connect(equalizerBands[0]);
 equalizerBands.forEach((eq, index) => {
     if (index < equalizerBands.length - 1) {
         eq.connect(equalizerBands[index + 1]);
-        changeFrequenceGain(index, 30);
     } else {
         eq.toMaster();
     }
 });
 
-// produire inverse
-const revertChange = function() {
-    // parcourir equalizerBands, get all gains in an array
-    // apply negative value of each gain to each equalizerBands (might alter result obtained)
-}
+// lie les filtres inverses pour la vérification
+sourceCheck.connect(equalizerCheck[0]);
+equalizerCheck.forEach((eq, index) => {
+    if (index < equalizerCheck.length - 1) {
+        eq.connect(equalizerCheck[index + 1]);
+    } else {
+        eq.toMaster();
+    }
+});
