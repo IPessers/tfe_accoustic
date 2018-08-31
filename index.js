@@ -7,7 +7,7 @@ const audioContext = new AudioContext();
 
 // definition de la source
 // const source = new Tone.Player('./assets/Bruit_rose_10s.wav');
-const source = new Tone.Player('./assets/Bon Jovi - You give love a bad name.mp3');
+const source = new Tone.Player('./assets/Bon Jovi - You give love a bad name.mp3'); // TODO charger fichier venant de l'html
 source.volume.value = -20;
 source.autostart = true;
 source.loop = true;
@@ -18,21 +18,26 @@ const EQUALIZER_TRIPLE = [10, 12.5, 16, 20, 25, 31.5, 40, 50, 63, 80, 100, 125, 
 let isSimple = false;
 
 // initialise chaque frequence a neutre
-const equalizerSetup = function(frequence) {
+/**
+ * Basic setup for gain nodes
+ * @param {*} frequence number
+ * @param {*} tiersOctave boolean
+ */
+const equalizerSetup = function(frequence, tiersOctave) {
     const filter = Tone.context.createBiquadFilter();
     filter.type = 'peaking';
     filter.frequency.value = frequence;
-    filter.Q.value = 4.31;
+    filter.Q.value = tiersOctave ? 4.31 : 1.4;
     filter.gain.value = 0;
     return filter;
 }
 
 // choisir simple ou triple octave
-const equalizerBands = isSimple ? EQUALIZER_SIMPLE.map(equalizerSetup) : EQUALIZER_TRIPLE.map(equalizerSetup);
+const equalizerBands = isSimple ? EQUALIZER_SIMPLE.map(equalizerSetup, false) : EQUALIZER_TRIPLE.map(equalizerSetup, true);
 
 // fonction pour changer une frequence
 const changeFrequenceGain = function(frequenceIndex, value) {
-    equalizerBands[frequenceIndex].gain = value;
+    equalizerBands[frequenceIndex].gain.value = value;
 }
 
 // lie tous les filtres

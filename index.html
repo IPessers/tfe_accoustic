@@ -24,10 +24,10 @@
 </head>
 <body>
 	<div id="accueil">
-		<img src="img/Logo Rooms_white.png" alt="logo Room's" id="roomsLogo">
+		<img src="src/img/Logo Rooms_white.png" alt="logo Room's" id="roomsLogo">
 		<h1 id="titre">Interface de filtrage d'un signal audio</h1>
-		<img src="img/mouse.svg" alt="mouse icon" id="mouseIcon">
-		<img src="img/hand.svg" alt="hand icon" id="handIcon">
+		<img src="src/img/mouse.svg" alt="mouse icon" id="mouseIcon">
+		<img src="src/img/hand.svg" alt="hand icon" id="handIcon">
 
 		<div id="animationCercle">
 			<a href="#titre2" class="js-scrollTo"><div class="circle one"></div></a>
@@ -40,11 +40,12 @@
 				</div>
 	
 				<div id="upload">
-					<a href="#" class="a-btn-upload">
-						<span class="a-btn-upload-text">Signal à filtrer</span> 
-						<span class="a-btn-icon-upload-left"><span></span></span>	
-					</a>
-
+					<!--Bouton pour uploader le signal-->
+					<input name="uploadAudio" id="audio_file" type="file" accept="audio/*" >
+					<label class="a-btn-upload" for="audio_file">
+						<label class="a-btn-upload-text" for="audio_file">Signal à filtrer</label>
+							<span class="a-btn-icon-upload-left"><span></span></span>	
+					</label>
 					<p>Filtrage (IEC 1260)</p>
 
 					<div id="octave">		
@@ -52,7 +53,7 @@
 							<option value="1">1/3 Octave</option>
 							<option value="2">1/1 Octave</option>
 						</select>
-						<img src="img/arrowdownmini.svg" alt="mini down arrow">
+						<img src="src/img/arrowdownmini.svg" alt="mini down arrow">
 					</div>
 				</div>
 	
@@ -105,26 +106,29 @@
 	
 				<div id="signalEntree">
 					<p>Reconstitution du signal d'entrée pour vérification</p>
-					<div id="boutonPlayEntree">
-						<img src="img/play.svg" alt="play" id="playEntree">
+						<!-- <audio control id="audio_player" /> -->
+						<audio controls id="audio_player"></audio>
+
+					<!--<div id="boutonPlayEntree">
+						<img src="src/img/play.svg" alt="play" id="playEntree">
 						<div id="playEntreeCircle"></div>
 					</div>		
 
 					<div id="boutonPauseEntree">
-						<img src="img/pause.svg" alt="pause" id="pauseEntree">
+						<img src="src/img/pause.svg" alt="pause" id="pauseEntree">
 						<div id="pauseEntreeCircle"></div>
-					</div>
+					</div>-->
 				</div>
 	
 				<div id="signalSortant">
 					<p>Préécoute du signal sortant</p>
 					<div id="boutonPlaySortie">
-						<img src="img/play.svg" alt="play" id="playSortie">
+						<img src="src/img/play.svg" alt="play" id="playSortie">
 						<div id="playSortieCircle"></div>
 					</div>		
 
 					<div id="boutonPauseSortie">
-						<img src="img/pause.svg" alt="pause" id="pauseSortie">
+						<img src="src/img/pause.svg" alt="pause" id="pauseSortie">
 						<div id="pauseSortieCircle"></div>
 					</div>
 
@@ -139,15 +143,55 @@
 				<div id="darkMode" onclick="document.getElementById('css').href='style2.css'; document.getElementById('css2').href='style2.css';"></div>
 				<div id="lightMode" onclick="document.getElementById('css').href='style.css'; document.getElementById('css2').href='style.css';"></div>
 				<div id="goUp">
-					<a href="#titre2" class="js-scrollTo"><img src="img/goUp.svg" alt="DarkMode" id="arrowGoUp"></a>
+					<a href="#titre2" class="js-scrollTo"><img src="src/img/goUp.svg" alt="DarkMode" id="arrowGoUp"></a>
 					<a href="#titre2" class="js-scrollTo"><div id="circleGoUp"></div></a>
 				</div>
 			</div> 
 		</div>
 	</div>
 
+	<!-- Script pour charger un fichier audio et le lire-->
 	<script type="text/javascript">
-		// Affichage du code de nationalité choisi
+		var samples = {};
+		var player;
+		var audio_file = document.getElementById('audio_file');
+		audio_file.onchange = function(){
+		  setAudio(this.files, 'c', 'audio_player');
+		};
+		
+		function setAudio(files, note, audioPlayerId) {
+		    var file = URL.createObjectURL(files[0]); 
+		    var audio_player = document.getElementById(audioPlayerId);
+		    audio_player.src = file; 
+		    //audio_player.play();
+				samples[note] = file;
+		    player = new Tone.Players(samples).toMaster();
+		}
+		
+		
+		var playButton = document.getElementById('play');
+		playButton.addEventListener("click", function(){
+			for(var i = 0; i < 100; i++) {
+		  	var length = Math.random() * 40;
+		    var note = Math.random();
+		    if(note > 0.5) {
+		    	player.get('c').start(length);
+		    } else {
+		      player.get('d').start(length);
+		    }
+		  }
+		}, false);
+		
+		var stopButton = document.getElementById('stop')
+		playButton.addEventListener("click", function(){
+			player.stopAll();
+		}, false);
+		
+
+	</script>
+
+	<!--Script pour afficher seulement les fréquences demandées-->
+	<script type="text/javascript">
 	document.getElementById("choixOctave").addEventListener("change", function (e) {
 	    console.log("X" + e.target.value);
 
