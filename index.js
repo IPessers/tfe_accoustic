@@ -8,6 +8,79 @@ const audioContext = new AudioContext();
 // definition de la source
 // const source = new Tone.Player('./assets/Bruit_rose_10s.wav');
 const sourceFile = './assets/Bon Jovi - You give love a bad name.mp3';
+// AXEL ICI, cherche pour charger un fichier (rien de spécifique à Tone, il faut juste un léger mélange d'HTML/js)
+// tu vas alors avoir une référence vers ce fichier (même si c'est pas une url) et remplace Bonjovi par ça
+// urilise ça https://www.w3schools.com/tags/att_input_accept.asp
+// et tu donnes pointe vers le fichier grâce à JQuery et tu utilises ce pointeur sur source File
+
+// AXEL ICI, j'arrive pas à l'avoir, c'est la fonction d'export, j'arrive pas l'utiliser, trop fatigué, désolé
+// var rate = 22050;
+
+// function exportWAV(type, before, after){
+//     if (!before) { before = 0; }
+//     if (!after) { after = 0; }
+
+//     var channel = 0,
+//         buffers = [];
+//     for (channel = 0; channel < numChannels; channel++){
+//         buffers.push(mergeBuffers(recBuffers[channel], recLength));
+//     }
+
+//     var i = 0,
+//         offset = 0,
+//         newbuffers = [];
+
+//     for (channel = 0; channel < numChannels; channel += 1) {
+//         offset = 0;
+//         newbuffers[channel] = new Float32Array(before + recLength + after);
+//         if (before > 0) {
+//             for (i = 0; i < before; i += 1) {
+//                 newbuffers[channel].set([0], offset);
+//                 offset += 1;
+//             }
+//         }
+//         newbuffers[channel].set(buffers[channel], offset);
+//         offset += buffers[channel].length;
+//         if (after > 0) {
+//             for (i = 0; i < after; i += 1) {
+//                 newbuffers[channel].set([0], offset);
+//                 offset += 1;
+//             }
+//         }
+//     }
+
+//     if (numChannels === 2){
+//         var interleaved = interleave(newbuffers[0], newbuffers[1]);
+//     } else {
+//         var interleaved = newbuffers[0];
+//     }
+
+//     var downsampledBuffer = downsampleBuffer(interleaved, rate);
+//     var dataview = encodeWAV(downsampledBuffer, rate);
+//     var audioBlob = new Blob([dataview], { type: type });
+
+//     this.postMessage(audioBlob);
+// }
+
+// document.getElementById('export').addEventListener('click', function () {
+//     // export original recording
+//     module.recorder.exportWAV(function(blob) {
+//         var url = URL.createObjectURL(blob),
+//             li = document.createElement('li'),
+//             au = document.createElement('audio'),
+//             hf = document.createElement('a');
+
+//         au.controls = true;
+//         au.src = url;
+//         hf.href = url;
+//         hf.download = new Date().toISOString().replace('T', '-').slice(0, -5) + '.wav';
+//         hf.innerHTML = hf.download;
+//         li.appendChild(au);
+//         li.appendChild(hf);
+//         document.getElementById('downloads').appendChild(li);
+//     });
+// });
+
 let recorder;
 const startRecording = function() {
     Tone.context.createMediaStreamDestination();
@@ -15,8 +88,18 @@ const startRecording = function() {
     navigator.getUserMedia({audio: true}, function (stream) {
         const input = Tone.context.createMediaStreamSource(stream);
         recorder = new Recorder(input);
+        recorder.clear();
+        recorder.startTime = Tone.context.currentTime;
+        recorder.record();
     });
 };
+
+const stopRecordingAndExport = function(callback) {
+    recorder.stop();
+    recorder.getBuffer(function (buffers) {
+        callback(buffers);
+    });
+}
 
 const sourceAltered = new Tone.Player(sourceFile, function() {
     const playButton = document.querySelector('REPLACE_ME'); // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton play de la version user
