@@ -1,19 +1,7 @@
-console.log('No pain, no pain');
+// definition de la source en prenant le fichier donne par l'utilisateur dans la balise input
+const sourceFile = $('#audio_file');
 
-const audioContext = new AudioContext();
-
-// inspire toi de ça pour charger le fichier audio
-// https://jsfiddle.net/torinmb/507nb7c6/21/
-
-// definition de la source
-// const source = new Tone.Player('./assets/Bruit_rose_10s.wav');
-const sourceFile = './assets/Bon Jovi - You give love a bad name.mp3';
-// AXEL ICI, cherche pour charger un fichier (rien de spécifique à Tone, il faut juste un léger mélange d'HTML/js)
-// tu vas alors avoir une référence vers ce fichier (même si c'est pas une url) et remplace Bonjovi par ça
-// urilise ça https://www.w3schools.com/tags/att_input_accept.asp
-// et tu donnes pointe vers le fichier grâce à JQuery et tu utilises ce pointeur sur source File
-
-// AXEL ICI, j'arrive pas à l'avoir, c'est la fonction d'export, j'arrive pas l'utiliser, trop fatigué, désolé
+// Export file draft
 // var rate = 22050;
 
 // function exportWAV(type, before, after){
@@ -81,6 +69,7 @@ const sourceFile = './assets/Bon Jovi - You give love a bad name.mp3';
 //     });
 // });
 
+// enregitre le son avec les modifications de l'utilisateur pour pouvoir l'exporter avec apres
 let recorder;
 const startRecording = function() {
     Tone.context.createMediaStreamDestination();
@@ -94,6 +83,7 @@ const startRecording = function() {
     });
 };
 
+// arrete l enregistrement pour creer le fichier 
 const stopRecordingAndExport = function(callback) {
     recorder.stop();
     recorder.getBuffer(function (buffers) {
@@ -101,35 +91,38 @@ const stopRecordingAndExport = function(callback) {
     });
 }
 
-const sourceAltered = new Tone.Player(sourceFile, function() {
-    const playButton = document.querySelector('REPLACE_ME'); // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton play de la version user
 
+const sourceAltered = new Tone.Player(sourceFile, function() {
+    // permet au boutton selectionne de jouer le son avec les modifications de l'utilisateur
+    const playButton = document.querySelector('#playSortieCircle');
 	playButton.addEventListener('click', () => {
         player.start(new Tone.now());
         startRecording();
     });
 
-    document.querySelector('REPLACE_ME').addEventListener('click', () => { // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton stop de la version user
+    // permet au bouton selectionnne d arreter de jouer le e son avec les modifications de l'utilisateur
+    document.querySelector('#boutonPauseSortie').addEventListener('click', () => {
         player.stop();
     });
-}); // TODO charger fichier venant de l'html
+});
 sourceAltered.volume.value = -20;
-sourceAltered.autostart = true;
+sourceAltered.autostart = false;
 sourceAltered.loop = true;
 
 const sourceCheck = new Tone.Player(sourceFile, function() {
-    const playButton = document.querySelector('REPLACE_ME'); // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton play de la version check
-
+    // permet au boutton selectionne de jouer le son de verification de l'integrite de la source
+    const playButton = document.querySelector('#boutonPlayEntree');
 	playButton.addEventListener('click', () => {
         player.start(new Tone.now());
     });
 
-    document.querySelector('REPLACE_ME').addEventListener('click', () => { // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton stop de la version check
+    // permet au boutton selectionne d arreter de jouer le son de verification de l'integrite de la source
+    document.querySelector('#boutonPauseEntree').addEventListener('click', () => {
         player.stop();
     });
-}); // TODO charger fichier venant de l'html
+});
 sourceCheck.volume.value = -20;
-sourceCheck.autostart = true;
+sourceCheck.autostart = false;
 sourceCheck.loop = true;
 
 const EQUALIZER_SIMPLE = [16, 31.5, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
@@ -179,8 +172,15 @@ const changeFrequenceGain = function(frequenceIndex, value) {
     equalizerCheck[frequenceIndex + equalizerBands.length].gain.value = -value;
 }
 
+if (isSimple) {
+    // octave
+    for (let compteur = 0; compteur < EQUALIZER_SIMPLE.length; compteur = compteur + 1) {
+        $('.octave' + (compteur + 1)).addEventListener('change')
+    }
+} else {
+    // 3/3
+}
 
-// TODO merge in 1
 // lie tous les filtres
 sourceAltered.connect(equalizerBands[0]);
 equalizerBands.forEach((eq, index) => {
