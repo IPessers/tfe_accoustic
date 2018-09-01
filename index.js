@@ -8,12 +8,22 @@ const audioContext = new AudioContext();
 // definition de la source
 // const source = new Tone.Player('./assets/Bruit_rose_10s.wav');
 const sourceFile = './assets/Bon Jovi - You give love a bad name.mp3';
+let recorder;
+const startRecording = function() {
+    Tone.context.createMediaStreamDestination();
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+    navigator.getUserMedia({audio: true}, function (stream) {
+        const input = Tone.context.createMediaStreamSource(stream);
+        recorder = new Recorder(input);
+    });
+};
 
 const sourceAltered = new Tone.Player(sourceFile, function() {
     const playButton = document.querySelector('REPLACE_ME'); // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton play de la version user
 
 	playButton.addEventListener('click', () => {
         player.start(new Tone.now());
+        startRecording();
     });
 
     document.querySelector('REPLACE_ME').addEventListener('click', () => { // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton stop de la version user
@@ -42,7 +52,8 @@ sourceCheck.loop = true;
 const EQUALIZER_SIMPLE = [16, 31.5, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
 const EQUALIZER_TRIPLE = [10, 12.5, 16, 20, 25, 31.5, 40, 50, 63, 80, 100, 125, 160, 200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600, 2000, 2500, 3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000, 20000];
 
-let isSimple = false;
+let isSimple = false; // ============== ICI AXEL, tu dois faire changer la valeur en fonction de ton sélecteur de fréquences (1/3 ou 3/3)
+// Tu peux t'en sortir à coup de JQuery 'si option selectionne dans mon selecteur est 1/3 alors true sinon false
 
 // initialise chaque frequence a neutre
 /**
