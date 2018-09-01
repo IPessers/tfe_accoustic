@@ -10,13 +10,13 @@ const audioContext = new AudioContext();
 const sourceFile = './assets/Bon Jovi - You give love a bad name.mp3';
 
 const sourceAltered = new Tone.Player(sourceFile, function() {
-    const playUser = document.querySelector('REPLACE_ME'); // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton play de la version user
+    const playButton = document.querySelector('REPLACE_ME'); // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton play de la version user
 
-	playUser.addEventListener('click', () => {
+	playButton.addEventListener('click', () => {
         player.start(new Tone.now());
     });
 
-    document.querySelector('#stop').addEventListener('click', () => { // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton stop de la version user
+    document.querySelector('REPLACE_ME').addEventListener('click', () => { // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton stop de la version user
         player.stop();
     });
 }); // TODO charger fichier venant de l'html
@@ -25,13 +25,13 @@ sourceAltered.autostart = true;
 sourceAltered.loop = true;
 
 const sourceCheck = new Tone.Player(sourceFile, function() {
-    const playUser = document.querySelector('REPLACE_ME'); // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton play de la version check
+    const playButton = document.querySelector('REPLACE_ME'); // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton play de la version check
 
-	playUser.addEventListener('click', () => {
+	playButton.addEventListener('click', () => {
         player.start(new Tone.now());
     });
 
-    document.querySelector('#stop').addEventListener('click', () => { // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton stop de la version check
+    document.querySelector('REPLACE_ME').addEventListener('click', () => { // ============== ICI AXEL, faut arriver en Jquery à pointer sur le boutton stop de la version check
         player.stop();
     });
 }); // TODO charger fichier venant de l'html
